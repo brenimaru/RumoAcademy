@@ -21,11 +21,14 @@ namespace ResponsabilidadesClasse.Repositorios
             }
 
         }
+
+
+
         public void Inserir(Produto produto)
         {
             var identificador = ProximoIdentificador();
 
-            var sw = new StreamWriter(_caminhoBase);
+            var sw = new StreamWriter(_caminhoBase, true);
             sw.WriteLine(GerarLinhaProduto(identificador, produto));
             sw.Close();
         }
@@ -57,7 +60,10 @@ namespace ResponsabilidadesClasse.Repositorios
 
         public void Remover(int identificadorProduto)
         {
+            CarregarProdutos();
             var posicao = ListagemProdutos.FindIndex(x => x.IdentificadorProduto == identificadorProduto);
+            ListagemProdutos.RemoveAt(posicao);
+            RegravarProdutos(ListagemProdutos);
         }
 
 
