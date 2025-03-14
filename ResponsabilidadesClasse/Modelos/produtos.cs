@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ResponsabilidadesClasse.Modelos
 {
-    class produto
+    class Produto
     {
         public int IdentificadorProduto { get; set; }
         public string Nome { get; set; }

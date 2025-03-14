@@ -2,78 +2,81 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ResponsabilidadesClasse.Repositorios
 {
-    class ProdutoRepositorio
+    internal class ProdutoRepositorio
     {
-        private readonly String _CaminhoBase = "C:\\Projetos\\Database.locais\\produto.csv";
-        private List<produto> ListagemProdutos = new List<produto>();
+        private readonly string _caminhoBase = "C:\\Projetos\\Database.locais\\produto.txt";
+        private List<Produto> ListagemProdutos = new List<Produto>();
         public ProdutoRepositorio()
         {
-            if (!File.Exists(_CaminhoBase)) ;
-            var file = File.Create(_CaminhoBase);
-            file.Close();
+            if (!File.Exists(_caminhoBase))
+            {
+                var file = File.Create(_caminhoBase);
+                file.Close();
+            }
+
         }
-            public void Inserir(produto produto)
+        public void Inserir(Produto produto)
         {
             var identificador = ProximoIdentificador();
 
-            var sw = new StreamWriter(_CaminhoBase);
+            var sw = new StreamWriter(_caminhoBase);
             sw.WriteLine(GerarLinhaProduto(identificador, produto));
             sw.Close();
         }
-            public List<produto> Listar()
+        public List<Produto> Listar()
         {
-            CarregaProdutos();
+            CarregarProdutos();
             return ListagemProdutos;
         }
 
         public bool SeExiste(int identificadorProduto)
         {
-            CarregaProdutos();
+            CarregarProdutos();
             return ListagemProdutos.Any(x => x.IdentificadorProduto == identificadorProduto);
-            //foreach (var x in ListagemProdutos)
-            //{
-            // if (x.IdentificadorProduto == identificadorProduto)
-            // return true; 
-            //}
-            //return false; 
         }
+        //foreach (var x in ListagemProdutos)
+        // {
+        //      if (x.IdentificadorProduto == identificadorProdutor)
+        //          return true;
+        // }
 
-        public void Atualizar(produto produto)
+        // return false;
+        public void Atualizar(Produto produto)
         {
-            CarregaProdutos();
+            CarregarProdutos();
             var posicao = ListagemProdutos.FindIndex(x => x.IdentificadorProduto == produto.IdentificadorProduto);
             ListagemProdutos[posicao] = produto;
             RegravarProdutos(ListagemProdutos);
         }
 
-        public void Remover(int IdentificadorProduto)
+        public void Remover(int identificadorProduto)
         {
-           var posicao = ListagemProdutos.FindIndex(x => x.IdentificadorProduto == IdentificadorProduto);
-        
-        
-        
+            var posicao = ListagemProdutos.FindIndex(x => x.IdentificadorProduto == identificadorProduto);
         }
+
+
         #region Metodos privados
-        private produto LinhaTextoParaProduto(string linha)
+        private Produto LinhaTextoParaProduto(string linha)
         {
             var colunas = linha.Split(';');
-            var produto = new produto();
+            var produto = new Produto();
             produto.IdentificadorProduto = int.Parse(colunas[0]);
             produto.Nome = colunas[1];
             produto.Valor = decimal.Parse(colunas[2]);
             produto.Situacao = true;
 
-            return produto; 
+            return produto;
         }
-        private void CarregaProdutos()
+        private void CarregarProdutos()
         {
-            ListagemProdutos.Clear();  
-            var sr = new StreamReader(_CaminhoBase);
+            ListagemProdutos.Clear();
+            var sr = new StreamReader(_caminhoBase);
             while (true)
             {
                 var linha = sr.ReadLine();
@@ -88,27 +91,30 @@ namespace ResponsabilidadesClasse.Repositorios
 
         private int ProximoIdentificador()
         {
-            CarregaProdutos();
+            CarregarProdutos();
 
             if (ListagemProdutos.Count == 0)
                 return 1;
-           
+
             return ListagemProdutos.Max(x => x.IdentificadorProduto) + 1;
         }
-        private void RegravarProdutos(List<produto> produtos)
+        private void RegravarProdutos(List<Produto> produtos)
         {
-            var sw = new StreamWriter(_CaminhoBase);
+            var sw = new StreamWriter(_caminhoBase);
+
             foreach (var produto in produtos.OrderBy(x => x.IdentificadorProduto))
             {
                 sw.WriteLine(GerarLinhaProduto(produto.IdentificadorProduto, produto));
             }
-             sw.Close();
+            sw.Close();
         }
-        private string GerarLinhaProduto(int identificador, produto produto)
+
+        private string GerarLinhaProduto(int identificador, Produto produto)
         {
             return $"{identificador};{produto.Nome};{produto.Valor};{produto.Situacao}";
         }
         #endregion
+
 
 
     }
