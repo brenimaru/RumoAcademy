@@ -14,11 +14,11 @@ namespace ResponsabilidadesClasse.Repositorios
         private List<Produto> ListagemProdutos = new List<Produto>();
         public ProdutoRepositorio()
         {
-            if (!File.Exists(_caminhoBase))
-            {
-                var file = File.Create(_caminhoBase);
-                file.Close();
-            }
+            if (!File.Exists(_caminhoBase)) 
+    {
+        var file = File.Create(_caminhoBase);
+        file.Close();
+    }
 
         }
 
@@ -65,7 +65,13 @@ namespace ResponsabilidadesClasse.Repositorios
             ListagemProdutos.RemoveAt(posicao);
             RegravarProdutos(ListagemProdutos);
         }
-
+        public void Desativar(int identificadorProduto)
+        {
+            CarregarProdutos();
+            var posicao = ListagemProdutos.FindIndex(x => x.IdentificadorProduto == identificadorProduto);
+            ListagemProdutos[posicao].Situacao = false;
+            RegravarProdutos(ListagemProdutos);
+        }
 
         #region Metodos privados
         private Produto LinhaTextoParaProduto(string linha)
@@ -75,7 +81,7 @@ namespace ResponsabilidadesClasse.Repositorios
             produto.IdentificadorProduto = int.Parse(colunas[0]);
             produto.Nome = colunas[1];
             produto.Valor = decimal.Parse(colunas[2]);
-            produto.Situacao = true;
+            produto.Situacao = Convert.ToBoolean(colunas[3]);
 
             return produto;
         }
