@@ -1,3 +1,0 @@
-2;Namorada;123124521312321,90;True
-3;Cercena;1,99;False
-4;bombom;2,99;True
