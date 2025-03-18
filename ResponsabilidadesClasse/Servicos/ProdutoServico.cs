@@ -65,7 +65,7 @@ namespace ResponsabilidadesClasse.Servicos
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Ocorreu um erro fatal no programa, veja a mensagem do erro e contate o suporte:" ex.Message);
+                    Console.WriteLine("Ocorreu um erro fatal no programa.. veja a mensagem do erro e contate o suporte:" ex.Message);
                     Console.WriteLine("Pressione uma tecla para continuar!");
                     Console.ReadKey();
                 }
